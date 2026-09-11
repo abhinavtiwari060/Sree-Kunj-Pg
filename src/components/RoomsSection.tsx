@@ -323,6 +323,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
           <img
             src={images[activeImageIdx]}
             alt={`Room ${room.roomNumber}`}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
 

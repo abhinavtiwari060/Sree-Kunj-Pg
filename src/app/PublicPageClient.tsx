@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { About } from '@/components/About';
@@ -11,9 +12,22 @@ import { TestimonialStack, TestimonialItem } from '@/components/TestimonialStack
 import { LocationSection } from '@/components/LocationSection';
 import { InquirySection } from '@/components/InquirySection';
 import { Footer } from '@/components/Footer';
-import { FloatingWhatsApp } from '@/components/FloatingWhatsApp';
-import { BookingModal } from '@/components/BookingModal';
-import { VisitModal } from '@/components/VisitModal';
+
+// Code-split heavy interactive modals & floating widget to reduce initial JS payload
+const BookingModal = dynamic(
+  () => import('@/components/BookingModal').then((mod) => mod.BookingModal),
+  { ssr: false }
+);
+
+const VisitModal = dynamic(
+  () => import('@/components/VisitModal').then((mod) => mod.VisitModal),
+  { ssr: false }
+);
+
+const FloatingWhatsApp = dynamic(
+  () => import('@/components/FloatingWhatsApp').then((mod) => mod.FloatingWhatsApp),
+  { ssr: false }
+);
 
 interface PublicPageClientProps {
   initialRooms: RoomItem[];
@@ -47,7 +61,7 @@ export const PublicPageClient: React.FC<PublicPageClientProps> = ({
     setIsVisitOpen(true);
   };
 
-  const whatsappNum = settings?.whatsappNumber || '919876543210';
+  const whatsappNum = settings?.whatsappNumber || '918957356189';
 
   return (
     <main className="min-h-screen relative overflow-x-hidden">
@@ -112,25 +126,29 @@ export const PublicPageClient: React.FC<PublicPageClientProps> = ({
         contactEmail={settings?.contactEmail}
       />
 
-      {/* Floating WhatsApp Action Widget */}
+      {/* Floating WhatsApp Action Widget (Deferred client-side) */}
       <FloatingWhatsApp whatsappNumber={whatsappNum} />
 
-      {/* Interactive Booking Modal */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-        selectedRoom={selectedRoom}
-        allRooms={initialRooms}
-        whatsappNumber={whatsappNum}
-      />
+      {/* Interactive Booking Modal (Loaded on demand) */}
+      {isBookingOpen && (
+        <BookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+          selectedRoom={selectedRoom}
+          allRooms={initialRooms}
+          whatsappNumber={whatsappNum}
+        />
+      )}
 
-      {/* Interactive Visit Scheduler Modal */}
-      <VisitModal
-        isOpen={isVisitOpen}
-        onClose={() => setIsVisitOpen(false)}
-        whatsappNumber={whatsappNum}
-        defaultVisitType={visitType}
-      />
+      {/* Interactive Visit Scheduler Modal (Loaded on demand) */}
+      {isVisitOpen && (
+        <VisitModal
+          isOpen={isVisitOpen}
+          onClose={() => setIsVisitOpen(false)}
+          whatsappNumber={whatsappNum}
+          defaultVisitType={visitType}
+        />
+      )}
     </main>
   );
 };

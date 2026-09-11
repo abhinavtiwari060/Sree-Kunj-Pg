@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles,
@@ -61,14 +61,18 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
+        setIsPlaying(false);
       } else {
-        videoRef.current.play().catch(() => {});
+        videoRef.current
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch(() => setIsPlaying(false));
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
-  const toggleMute = () => {
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
@@ -77,9 +81,9 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
 
   return (
     <section id="testimonials" className="py-20 relative overflow-hidden bg-white">
-      {/* Solid Ambient Background Glows */}
-      <div className="ambient-bg-pink-1 top-1/3 left-10 opacity-30" />
-      <div className="ambient-bg-pink-2 bottom-10 right-10 opacity-30" />
+      {/* Solid Ambient Background Shapes */}
+      <div className="ambient-bg-pink-1 top-1/3 left-10 opacity-30 pointer-events-none" />
+      <div className="ambient-bg-pink-2 bottom-10 right-10 opacity-30 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -112,6 +116,7 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
                 const total = activeTestimonials.length;
                 const position = (idx - (currentIndex % total) + total) % total;
 
+                // Only render the top 3 cards in DOM to save memory & repaint cost
                 if (position > 2 && position < total - 1) return null;
 
                 const isFront = position === 0;
@@ -140,25 +145,37 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
                   >
                     {isFront ? (
                       <div className="relative w-full h-full bg-black">
+                        {/* Only front card mounts video stream */}
                         <video
                           ref={videoRef}
                           src={item.videoUrl}
                           poster={item.posterUrl}
                           playsInline
                           loop
+                          preload="none"
                           muted={isMuted}
                           className="w-full h-full object-cover"
                         />
 
+                        {/* Instant Poster Fallback Overlay */}
+                        {item.posterUrl && !isPlaying && (
+                          <img
+                            src={item.posterUrl}
+                            alt={item.name}
+                            loading="eager"
+                            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                          />
+                        )}
+
                         {/* Top Resident Badge */}
                         <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-20">
-                          <span className="px-3 py-1 rounded-full bg-black/60 text-white text-xs font-bold border border-white/20">
+                          <span className="px-3 py-1 rounded-full bg-black/65 backdrop-blur-xs text-white text-xs font-bold border border-white/20">
                             {item.name}
                           </span>
 
                           <button
                             onClick={toggleMute}
-                            className="p-1.5 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors"
+                            className="p-1.5 rounded-full bg-black/65 backdrop-blur-xs text-white hover:bg-black/85 transition-colors"
                             aria-label="Toggle mute"
                           >
                             {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-pink-400" />}
@@ -193,11 +210,14 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
                         </div>
                       </div>
                     ) : (
+                      /* Stacked cards only load lightweight poster images */
                       <div className="relative w-full h-full bg-slate-900">
                         {item.posterUrl ? (
                           <img
                             src={item.posterUrl}
                             alt={item.name}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover brightness-75"
                           />
                         ) : (
@@ -224,7 +244,7 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
                 initial={{ opacity: 0, x: 15 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -15 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.25 }}
                 className="glass-card rounded-3xl p-6 sm:p-8 space-y-5 relative border border-pink-200"
               >
                 <Quote className="w-10 h-10 text-pink-200 absolute top-6 right-6" />

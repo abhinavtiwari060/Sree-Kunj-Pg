@@ -2,8 +2,8 @@ import React from 'react';
 import { getRooms, getFacilities, getTestimonials, getSettings } from '@/lib/dataService';
 import { PublicPageClient } from './PublicPageClient';
 
-// Enable ISR or dynamic server rendering
-export const dynamic = 'force-dynamic';
+// Enable ISR revalidation for instantaneous TTFB server response
+export const revalidate = 60;
 
 export default async function HomePage() {
   const [rooms, facilities, testimonials, settings] = await Promise.all([

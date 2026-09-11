@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from 'next';
+import { Outfit } from 'next/font/google';
 import './globals.css';
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  display: 'swap',
+  variable: '--font-outfit',
+});
 
 export const metadata: Metadata = {
   title: 'Sree Kunj Girls PG Jaipur | Premium Accommodation Near JECRC & Poornima University',
@@ -67,14 +75,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`scroll-smooth ${outfit.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
         {/* JSON-LD Structured Data Schema for SEO */}
         <script
           type="application/ld+json"

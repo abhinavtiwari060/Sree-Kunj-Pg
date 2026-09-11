@@ -55,9 +55,9 @@ export const defaultRooms = [
     description: 'Spacious private executive room with plush single bed, study desk, attached balcony, and ambient lighting.',
     facilities: ['Split AC', 'Attached Washroom', 'Private Balcony', 'High-Speed Wi-Fi', 'Wardrobe with Digital Locker', 'Daily Housekeeping'],
     images: [
-      'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1582582621959-48d27397dc69?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=700&q=75',
+      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=75',
+      'https://images.unsplash.com/photo-1582582621959-48d27397dc69?auto=format&fit=crop&w=700&q=75',
     ],
     availability: 'Available',
     featured: true,

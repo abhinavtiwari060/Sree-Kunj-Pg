@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { MapPin, Navigation, Sparkles, Phone, Mail, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Navigation, Sparkles, Phone, Mail, ExternalLink, Map } from 'lucide-react';
 
 interface LocationSectionProps {
   address?: string;
@@ -28,6 +28,8 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
     { name: 'Mahatma Gandhi Hospital', distance: '2.5 km', travelTime: '7 mins drive' },
   ],
 }) => {
+  const [mapLoaded, setMapLoaded] = useState(false);
+
   return (
     <section id="location" className="py-20 relative bg-[#FFF5F7]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,19 +52,40 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
         <div className="glass-card rounded-3xl p-4 sm:p-6 shadow-xl border border-pink-200 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             
-            {/* Embedded Google Map */}
-            <div className="lg:col-span-7 rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto lg:h-[400px] bg-pink-100 relative shadow-inner">
-              <iframe
-                src={googleMapsEmbedUrl}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Sree Kunj Girls PG Location Map"
-                className="w-full h-full"
-              />
+            {/* Embedded Google Map (Lazy loaded with placeholder) */}
+            <div className="lg:col-span-7 rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/9] lg:aspect-auto lg:h-[400px] bg-pink-100 relative shadow-inner flex items-center justify-center">
+              {mapLoaded ? (
+                <iframe
+                  src={googleMapsEmbedUrl}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Sree Kunj Girls PG Location Map"
+                  className="w-full h-full"
+                />
+              ) : (
+                <div className="w-full h-full p-6 flex flex-col items-center justify-center text-center space-y-3 bg-pink-50/90">
+                  <div className="w-12 h-12 rounded-2xl bg-pink-600 text-white flex items-center justify-center shadow-md">
+                    <Map className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-slate-900">Interactive Campus Map</h3>
+                    <p className="text-xs text-slate-600 max-w-xs mt-0.5">
+                      Plot 42, Institutional Corridor, Near JECRC University Gate, Sitapura
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setMapLoaded(true)}
+                    className="glass-button-primary px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-xs"
+                  >
+                    <span>Load Live Google Map</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Address & Direct Directions Box */}

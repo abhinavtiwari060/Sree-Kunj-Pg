@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Shield, MapPin, Play, Pause, ChevronRight, Video, CheckCircle2 } from 'lucide-react';
+import { Shield, MapPin, Play, Pause, ChevronRight, Video, CheckCircle2 } from 'lucide-react';
 
 interface HeroProps {
   heading?: string;
@@ -19,29 +19,53 @@ export const Hero: React.FC<HeroProps> = ({
   subheading = 'A comfortable, secure and modern student residence located right near JECRC University and Poornima University. 4 dedicated floors with 24/7 female security, Wi-Fi 6, and chef-curated vegetarian meals.',
   badge = 'Girls PG in Jaipur • Near JECRC & Poornima',
   videoUrl = 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-living-room-with-a-view-41484-large.mp4',
-  posterUrl = 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1920&q=80',
+  posterUrl = 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=75',
   onOpenBooking,
   onOpenVisit,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  useEffect(() => {
+    // Defer video auto-play slightly so critical above-the-fold content paints instantly
+    const timer = setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+            setVideoLoaded(true);
+          })
+          .catch(() => {
+            // Browser autoplay policy or low data mode
+            setIsPlaying(false);
+          });
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const togglePlay = () => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
+        setIsPlaying(false);
       } else {
-        videoRef.current.play();
+        videoRef.current
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch(() => {});
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
   return (
     <section id="hero" className="relative min-h-[90vh] pt-28 pb-16 flex items-center justify-center overflow-hidden bg-[#FFF5F7]">
       {/* Solid background ambient shapes (Zero gradients) */}
-      <div className="ambient-bg-pink-1 -top-20 -left-20" />
-      <div className="ambient-bg-pink-2 top-1/2 -right-24" />
+      <div className="ambient-bg-pink-1 -top-20 -left-20 pointer-events-none" />
+      <div className="ambient-bg-pink-2 top-1/2 -right-24 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -50,7 +74,7 @@ export const Hero: React.FC<HeroProps> = ({
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
             className="lg:col-span-7 space-y-6"
           >
             {/* Proximity Eyebrow Badge */}
@@ -128,11 +152,11 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
           </motion.div>
 
-          {/* Right Hero Video Glass Card */}
+          {/* Right Hero Media Glass Card (Optimized Poster-first Video) */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
+            initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
             className="lg:col-span-5 relative"
           >
             <div className="relative rounded-3xl p-3 bg-white/90 backdrop-blur-xl border border-pink-200 shadow-xl shadow-pink-600/5">
@@ -143,16 +167,28 @@ export const Hero: React.FC<HeroProps> = ({
                 <span className="text-[11px] font-bold text-slate-900">Live Campus Walkthrough</span>
               </div>
 
-              {/* Video Player */}
+              {/* Video Player Container with Poster placeholder */}
               <div className="relative rounded-2xl overflow-hidden aspect-[4/5] bg-slate-950 shadow-inner group">
+                {/* Fallback & instant poster image */}
+                <img
+                  src={posterUrl}
+                  alt="Sree Kunj Girls PG Campus"
+                  loading="eager"
+                  fetchPriority="high"
+                  className={`w-full h-full object-cover transition-opacity duration-500 absolute inset-0 ${
+                    videoLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                  }`}
+                />
+
                 <video
                   ref={videoRef}
                   src={videoUrl}
                   poster={posterUrl}
-                  autoPlay
+                  preload="metadata"
                   loop
                   muted
                   playsInline
+                  onLoadedData={() => setVideoLoaded(true)}
                   className="w-full h-full object-cover"
                 />
 
