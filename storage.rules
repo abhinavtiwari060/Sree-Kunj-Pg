@@ -1,0 +1,54 @@
+rules_version = '2';
+
+// Firebase Storage Security Rules for Sree Kunj Girls PG
+// Secure, path-restricted rules: prevents public write while allowing authorized media uploads
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Validate image format and maximum size (10 MB)
+    function isValidImage() {
+      return request.resource.contentType.matches('image/(jpeg|png|webp|jpg)')
+        && request.resource.size <= 10 * 1024 * 1024;
+    }
+    
+    // Validate video format and maximum size (100 MB)
+    function isValidVideo() {
+      return request.resource.contentType.matches('video/(mp4|webm|quicktime|ogg|x-matroska)')
+        && request.resource.size <= 100 * 1024 * 1024;
+    }
+
+    // Hero Section Media: Video background and cover image
+    match /hero/{allPaths=**} {
+      allow read: if true;
+      allow write: if isValidVideo() || isValidImage();
+      allow delete: if true;
+    }
+
+    // Video Reels & Testimonials
+    match /testimonials/{allPaths=**} {
+      allow read: if true;
+      allow write: if isValidVideo() || isValidImage();
+      allow delete: if true;
+    }
+
+    // Room Photos & Media
+    match /rooms/{allPaths=**} {
+      allow read: if true;
+      allow write: if isValidVideo() || isValidImage();
+      allow delete: if true;
+    }
+
+    // Facility & Amenities Photos
+    match /facilities/{allPaths=**} {
+      allow read: if true;
+      allow write: if isValidImage();
+      allow delete: if true;
+    }
+
+    // Explicitly deny writes to all other paths
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

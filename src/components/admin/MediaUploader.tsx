@@ -117,6 +117,8 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
 
     setStatus('uploading');
     setProgressPercent(0);
+    const totalMB = (selectedFile.size / (1024 * 1024)).toFixed(1);
+    setProgressDetails(`0.0 MB / ${totalMB} MB`);
     setErrorMessage('');
 
     try {

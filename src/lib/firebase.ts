@@ -110,18 +110,19 @@ export function formatFirebaseStorageError(error: any): string {
   const code = (error as StorageError)?.code || '';
   const message = (error?.message || String(error)).toLowerCase();
 
-  // Check for CORS, 404 preflight, or network failures
+  // Check for CORS, 404 preflight, network failures, or unexposed XHR status
   if (
     message.includes('cors') ||
     message.includes('preflight') ||
     message.includes('failed to fetch') ||
     message.includes('err_failed') ||
-    message.includes('network error')
+    message.includes('network error') ||
+    (code === 'storage/unknown' && (!error?.serverResponse || error.serverResponse === ''))
   ) {
-    return `Firebase Storage CORS / Preflight Error. 
-1) Ensure Firebase Storage is created in Firebase Console (Build > Storage > Get Started).
-2) Check that NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET in .env.local matches your Firebase bucket.
-3) Configure CORS for web origins using cors.json.`;
+    const bucket = firebaseConfig.storageBucket;
+    return `Firebase Storage CORS / Preflight Error:
+Cross-Origin request blocked. Apply cors.json to bucket '${bucket}':
+gcloud storage buckets update gs://${bucket} --cors-file=cors.json`;
   }
 
   if (code === 'storage/bucket-not-found' || message.includes('bucket-not-found') || message.includes('404')) {
@@ -185,8 +186,21 @@ export function uploadMediaWithProgress(
     const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const storageRef = ref(storage, `${folder}/${timestamp}_${sanitizedName}`);
 
+    // Ensure proper content type so videos stream inline and play directly in browser
+    const ext = '.' + file.name.split('.').pop()?.toLowerCase();
+    const mimeMap: Record<string, string> = {
+      '.mp4': 'video/mp4',
+      '.webm': 'video/webm',
+      '.mov': 'video/quicktime',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.webp': 'image/webp',
+    };
+    const resolvedContentType = file.type || mimeMap[ext] || 'application/octet-stream';
+
     uploadTask = uploadBytesResumable(storageRef, file, {
-      contentType: file.type || undefined,
+      contentType: resolvedContentType,
     });
 
     uploadTask.on(
