@@ -14,7 +14,7 @@ import {
   UploadCloud,
   AlertCircle
 } from 'lucide-react';
-import { uploadMediaToFirebase, uploadMediaWithProgress } from '@/lib/firebase';
+import { uploadToImageKit } from '@/lib/imagekit';
 
 export default function AdminRoomsPage() {
   const [rooms, setRooms] = useState<any[]>([]);
@@ -106,7 +106,7 @@ export default function AdminRoomsPage() {
         const file = fileList[i];
         setUploadProgress({ total: fileList.length, current: i + 1, percent: 0 });
 
-        const handle = uploadMediaWithProgress(file, `rooms/floor-${floor}`, (info) => {
+        const handle = uploadToImageKit(file, `rooms/floor-${floor}`, (info) => {
           setUploadProgress({ total: fileList.length, current: i + 1, percent: info.percent });
         });
 
@@ -536,7 +536,7 @@ export default function AdminRoomsPage() {
                 <div className="flex items-center gap-2">
                   <label className="cursor-pointer px-3.5 py-2 rounded-xl bg-pink-100 text-pink-700 font-bold hover:bg-pink-200 transition-colors flex items-center gap-1.5">
                     <UploadCloud className="w-4 h-4 text-pink-600" />
-                    <span>{isUploading ? 'Uploading to Firebase...' : 'Upload Images to Firebase'}</span>
+                    <span>{isUploading ? 'Uploading to ImageKit...' : 'Upload Images to ImageKit'}</span>
                     <input
                       type="file"
                       accept="image/*"

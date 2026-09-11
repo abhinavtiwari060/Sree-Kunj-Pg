@@ -192,7 +192,7 @@ export default function AdminMediaPage() {
             Hero Media & Video Testimonials
           </h1>
           <p className="text-xs text-slate-500">
-            Control the dynamic hero background video, poster cover image, and vertical student video reels with real-time Firebase upload tracking.
+            Control the dynamic hero background video, poster cover image, and vertical student video reels with real-time ImageKit CDN upload tracking.
           </p>
         </div>
 
@@ -254,7 +254,7 @@ export default function AdminMediaPage() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xs font-bold text-slate-900">Direct Media URLs & Fallbacks</h3>
-              <p className="text-[11px] text-slate-500">Firebase download URLs are automatically populated on upload. You can also manually paste existing URLs.</p>
+              <p className="text-[11px] text-slate-500">ImageKit CDN URLs are automatically populated on upload. You can also manually paste existing URLs.</p>
             </div>
 
             <button
@@ -408,7 +408,7 @@ export default function AdminMediaPage() {
                 <MediaUploader
                   mediaType="video"
                   label="Portrait Video (9:16 vertical)"
-                  sublabel="Upload MP4 vertical reel to Firebase Storage"
+                  sublabel="Upload MP4 vertical reel to ImageKit CDN"
                   storageFolder="testimonials"
                   currentUrl={testVideoUrl}
                   maxSizeBytes={50 * 1024 * 1024}

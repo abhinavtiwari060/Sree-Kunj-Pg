@@ -14,12 +14,12 @@ import {
   FileText,
 } from 'lucide-react';
 import {
-  uploadMediaWithProgress,
+  uploadToImageKit,
   validateVideoFile,
   validateImageFile,
-  UploadHandle,
-  StorageFolder,
-} from '@/lib/firebase';
+  type UploadHandle,
+  type StorageFolder,
+} from '@/lib/imagekit';
 
 export interface MediaUploaderProps {
   mediaType: 'video' | 'image';
@@ -122,7 +122,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
     setErrorMessage('');
 
     try {
-      const handle = uploadMediaWithProgress(
+      const handle = uploadToImageKit(
         selectedFile,
         storageFolder,
         (info) => {
@@ -279,7 +279,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <p className="text-[11px] text-slate-200">{progressDetails || 'Uploading to Firebase...'}</p>
+              <p className="text-[11px] text-slate-200">{progressDetails || 'Uploading to ImageKit CDN...'}</p>
             </div>
           )}
         </div>
@@ -373,7 +373,7 @@ export const MediaUploader: React.FC<MediaUploaderProps> = ({
                 className="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold shadow-md shadow-pink-600/20 transition-all flex items-center gap-1.5"
               >
                 <UploadCloud className="w-4 h-4" />
-                <span>Start Upload to Firebase</span>
+                <span>Start Upload to ImageKit</span>
               </button>
             )}
 
