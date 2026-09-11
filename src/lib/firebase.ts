@@ -107,7 +107,26 @@ export function validateImageFile(file: File, maxSizeBytes = 10 * 1024 * 1024): 
 export function formatFirebaseStorageError(error: any): string {
   if (!error) return 'An unknown error occurred during upload.';
   
-  const code = (error as StorageError)?.code || error?.message || String(error);
+  const code = (error as StorageError)?.code || '';
+  const message = (error?.message || String(error)).toLowerCase();
+
+  // Check for CORS, 404 preflight, or network failures
+  if (
+    message.includes('cors') ||
+    message.includes('preflight') ||
+    message.includes('failed to fetch') ||
+    message.includes('err_failed') ||
+    message.includes('network error')
+  ) {
+    return `Firebase Storage CORS / Preflight Error. 
+1) Ensure Firebase Storage is created in Firebase Console (Build > Storage > Get Started).
+2) Check that NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET in .env.local matches your Firebase bucket.
+3) Configure CORS for web origins using cors.json.`;
+  }
+
+  if (code === 'storage/bucket-not-found' || message.includes('bucket-not-found') || message.includes('404')) {
+    return `Firebase Storage Bucket '${firebaseConfig.storageBucket}' not found (HTTP 404). Please verify that Storage is enabled in Firebase Console and the bucket name in .env.local is correct.`;
+  }
 
   switch (code) {
     case 'storage/unauthorized':
