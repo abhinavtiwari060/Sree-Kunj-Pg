@@ -1,8 +1,23 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Clapperboard, Video, Plus, Trash2, Edit2, Play, UploadCloud, CheckCircle2, Star, X } from 'lucide-react';
-import { uploadMediaToFirebase } from '@/lib/firebase';
+import {
+  Clapperboard,
+  Video,
+  Plus,
+  Trash2,
+  Edit2,
+  Play,
+  UploadCloud,
+  CheckCircle2,
+  Star,
+  X,
+  Save,
+  Image as ImageIcon,
+  Film,
+  Sparkles,
+} from 'lucide-react';
+import { MediaUploader } from '@/components/admin/MediaUploader';
 
 export default function AdminMediaPage() {
   const [settings, setSettings] = useState<any>(null);
@@ -13,7 +28,7 @@ export default function AdminMediaPage() {
   const [heroVideoUrl, setHeroVideoUrl] = useState('');
   const [heroPosterUrl, setHeroPosterUrl] = useState('');
   const [isSavingHero, setIsSavingHero] = useState(false);
-  const [isUploadingHero, setIsUploadingHero] = useState(false);
+  const [heroSaveSuccess, setHeroSaveSuccess] = useState(false);
 
   // Testimonial modal state
   const [testModalOpen, setTestModalOpen] = useState(false);
@@ -24,7 +39,7 @@ export default function AdminMediaPage() {
   const [testPosterUrl, setTestPosterUrl] = useState('');
   const [testText, setTestText] = useState('');
   const [testRating, setTestRating] = useState(5);
-  const [isUploadingTestVideo, setIsUploadingTestVideo] = useState(false);
+  const [isSavingTest, setIsSavingTest] = useState(false);
 
   const loadMedia = async () => {
     try {
@@ -53,40 +68,44 @@ export default function AdminMediaPage() {
     loadMedia();
   }, []);
 
-  const handleSaveHero = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSaveHero = async (overrideVideo?: string, overridePoster?: string) => {
     setIsSavingHero(true);
+    setHeroSaveSuccess(false);
     try {
+      const videoToSave = overrideVideo !== undefined ? overrideVideo : heroVideoUrl;
+      const posterToSave = overridePoster !== undefined ? overridePoster : heroPosterUrl;
+
       const res = await fetch('/api/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          heroVideoUrl: heroVideoUrl.trim(),
-          heroPosterUrl: heroPosterUrl.trim(),
+          heroVideoUrl: videoToSave.trim(),
+          heroPosterUrl: posterToSave.trim(),
         }),
       });
       if (res.ok) {
-        alert('Hero Media updated successfully!');
+        setHeroSaveSuccess(true);
+        setTimeout(() => setHeroSaveSuccess(false), 3500);
+      } else {
+        const err = await res.json();
+        alert('Failed to save Hero Media to database: ' + (err.error || 'Server error'));
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error('Error saving hero media:', e);
+      alert('Error saving hero media: ' + e.message);
     } finally {
       setIsSavingHero(false);
     }
   };
 
-  const handleHeroFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
-    setIsUploadingHero(true);
-    try {
-      const downloadUrl = await uploadMediaToFirebase(file, 'hero');
-      setHeroVideoUrl(downloadUrl);
-    } catch (err: any) {
-      alert('Upload failed: ' + err.message);
-    } finally {
-      setIsUploadingHero(false);
-    }
+  const handleHeroVideoUploaded = async (downloadUrl: string) => {
+    setHeroVideoUrl(downloadUrl);
+    await handleSaveHero(downloadUrl, undefined);
+  };
+
+  const handleHeroCoverUploaded = async (downloadUrl: string) => {
+    setHeroPosterUrl(downloadUrl);
+    await handleSaveHero(undefined, downloadUrl);
   };
 
   const openCreateTestimonial = () => {
@@ -113,6 +132,12 @@ export default function AdminMediaPage() {
 
   const handleTestimonialSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!testVideoUrl) {
+      alert('Please upload or provide a video URL for the testimonial.');
+      return;
+    }
+
+    setIsSavingTest(true);
     const payload = {
       name: testName,
       university: testUniversity,
@@ -139,13 +164,16 @@ export default function AdminMediaPage() {
       }
       await loadMedia();
       setTestModalOpen(false);
-    } catch (e) {
+    } catch (e: any) {
       console.error('Error saving testimonial:', e);
+      alert('Error saving testimonial: ' + e.message);
+    } finally {
+      setIsSavingTest(false);
     }
   };
 
   const handleDeleteTestimonial = async (id: string) => {
-    if (!confirm('Are you sure you want to remove this testimonial?')) return;
+    if (!confirm('Are you sure you want to remove this student testimonial?')) return;
     try {
       await fetch(`/api/testimonials/${id}`, { method: 'DELETE' });
       setTestimonials((prev) => prev.filter((t) => t._id !== id));
@@ -156,98 +184,131 @@ export default function AdminMediaPage() {
 
   return (
     <div className="space-y-10">
-      <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-          Hero Media & Video Testimonials
-        </h1>
-        <p className="text-xs text-slate-500">
-          Control the dynamic hero video background and vertical student video reels.
-        </p>
-      </div>
-
-      {/* Hero Video Management Section */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 sm:p-8 space-y-6">
-        <div className="flex items-center gap-2 text-pink-600 font-bold text-xs uppercase tracking-wider">
-          <Clapperboard className="w-4 h-4" />
-          <span>Dynamic Hero Video Asset</span>
+      
+      {/* Page Title & Status */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+            Hero Media & Video Testimonials
+          </h1>
+          <p className="text-xs text-slate-500">
+            Control the dynamic hero background video, poster cover image, and vertical student video reels with real-time Firebase upload tracking.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {heroSaveSuccess && (
+          <div className="px-4 py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs animate-in fade-in">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>MongoDB Database Synchronized!</span>
+          </div>
+        )}
+      </div>
+
+      {/* SECTION 1: HERO MEDIA (Video + Cover Image) */}
+      <div className="space-y-6">
+        <div className="flex items-center gap-2 text-pink-600 font-bold text-xs uppercase tracking-wider">
+          <Clapperboard className="w-4 h-4" />
+          <span>Hero Media Configuration</span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
-          {/* Video Preview */}
-          <div className="lg:col-span-5 aspect-video bg-black rounded-2xl overflow-hidden shadow-inner relative group">
-            <video
-              src={heroVideoUrl}
-              poster={heroPosterUrl}
-              controls
-              className="w-full h-full object-cover"
-            />
+          {/* 1. Hero Video Uploader */}
+          <MediaUploader
+            mediaType="video"
+            label="Hero Background Video"
+            sublabel="MP4 or WebM video displayed in the hero section background. Maximum recommended size: 100 MB."
+            storageFolder="hero/video"
+            currentUrl={heroVideoUrl}
+            maxSizeBytes={100 * 1024 * 1024}
+            aspectRatio="video"
+            placeholderText="Upload or preview active Hero Video (MP4/WebM)"
+            onUploadSuccess={handleHeroVideoUploaded}
+            onDelete={() => {
+              setHeroVideoUrl('');
+              handleSaveHero('', undefined);
+            }}
+          />
+
+          {/* 2. Hero Cover Image Uploader */}
+          <MediaUploader
+            mediaType="image"
+            label="Hero Cover / Poster Image"
+            sublabel="Lightweight JPG/WebP image displayed immediately on page load before the video streams. Prevents blank/black screen."
+            storageFolder="hero/cover"
+            currentUrl={heroPosterUrl}
+            maxSizeBytes={10 * 1024 * 1024}
+            aspectRatio="video"
+            placeholderText="Upload or preview Hero Poster / Cover Image (JPG/PNG/WebP)"
+            onUploadSuccess={handleHeroCoverUploaded}
+            onDelete={() => {
+              setHeroPosterUrl('');
+              handleSaveHero(undefined, '');
+            }}
+          />
+
+        </div>
+
+        {/* Manual URL Overrides & Quick Database Save */}
+        <div className="bg-white rounded-2xl border border-pink-200 p-6 space-y-4 shadow-xs">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xs font-bold text-slate-900">Direct Media URLs & Fallbacks</h3>
+              <p className="text-[11px] text-slate-500">Firebase download URLs are automatically populated on upload. You can also manually paste existing URLs.</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handleSaveHero()}
+              disabled={isSavingHero}
+              className="px-5 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold shadow-md shadow-pink-600/20 transition-all flex items-center gap-1.5"
+            >
+              <Save className="w-3.5 h-3.5" />
+              <span>{isSavingHero ? 'Saving to Database...' : 'Save Media Settings'}</span>
+            </button>
           </div>
 
-          {/* Configuration Form */}
-          <form onSubmit={handleSaveHero} className="lg:col-span-7 space-y-4 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div>
               <label className="font-bold text-slate-700 block mb-1">
-                Active Hero Video URL (MP4 / WebM)
+                Active Hero Video URL
               </label>
               <input
                 type="url"
-                required
                 value={heroVideoUrl}
                 onChange={(e) => setHeroVideoUrl(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs"
+                placeholder="https://..."
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono"
               />
             </div>
 
             <div>
               <label className="font-bold text-slate-700 block mb-1">
-                Video Poster Fallback Image URL
+                Active Hero Poster / Cover Image URL
               </label>
               <input
                 type="url"
                 value={heroPosterUrl}
                 onChange={(e) => setHeroPosterUrl(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs"
+                placeholder="https://..."
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono"
               />
             </div>
-
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <label className="cursor-pointer px-3.5 py-2 rounded-xl bg-pink-100 text-pink-700 font-bold hover:bg-pink-200 transition-colors flex items-center gap-1.5">
-                <UploadCloud className="w-4 h-4" />
-                <span>{isUploadingHero ? 'Uploading Video...' : 'Upload Video to Firebase'}</span>
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={handleHeroFileUpload}
-                  className="hidden"
-                  disabled={isUploadingHero}
-                />
-              </label>
-
-              <button
-                type="submit"
-                disabled={isSavingHero}
-                className="px-5 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold shadow-md"
-              >
-                {isSavingHero ? 'Saving...' : 'Update Hero Video'}
-              </button>
-            </div>
-          </form>
-
+          </div>
         </div>
       </div>
 
-      {/* Student Video Testimonials Deck Manager */}
-      <div className="space-y-6">
+      {/* SECTION 2: STUDENT VIDEO TESTIMONIALS DECK */}
+      <div className="space-y-6 pt-4 border-t border-slate-200">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-slate-900">Student Video Testimonials Reel</h2>
-            <p className="text-xs text-slate-500">Vertical portrait student reviews shown in the 3D stack</p>
+            <p className="text-xs text-slate-500">Vertical portrait student reviews shown in the 3D stack on the homepage</p>
           </div>
 
           <button
             onClick={openCreateTestimonial}
-            className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md"
+            className="px-4 py-2.5 bg-pink-600 hover:bg-pink-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-pink-600/20"
           >
             <Plus className="w-4 h-4" />
             <span>Add Student Story</span>
@@ -258,9 +319,9 @@ export default function AdminMediaPage() {
           {testimonials.map((item) => (
             <div
               key={item._id}
-              className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between"
+              className="bg-white rounded-2xl border border-pink-200 shadow-xs overflow-hidden flex flex-col justify-between"
             >
-              <div className="aspect-[4/5] bg-slate-900 relative overflow-hidden">
+              <div className="aspect-[4/5] bg-slate-900 relative overflow-hidden group">
                 <video
                   src={item.videoUrl}
                   poster={item.posterUrl}
@@ -286,12 +347,14 @@ export default function AdminMediaPage() {
                 <button
                   onClick={() => openEditTestimonial(item)}
                   className="p-1.5 rounded-lg bg-slate-100 text-slate-700 hover:text-pink-600"
+                  title="Edit Story"
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => handleDeleteTestimonial(item._id)}
                   className="p-1.5 rounded-lg bg-slate-100 text-slate-700 hover:text-rose-600"
+                  title="Delete Story"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -301,10 +364,10 @@ export default function AdminMediaPage() {
         </div>
       </div>
 
-      {/* Testimonial Modal */}
+      {/* Testimonial Creation / Edit Modal with Progress Uploader */}
       {testModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 relative shadow-2xl border border-slate-200">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-5 relative shadow-2xl border border-slate-200 my-auto max-h-[92vh] overflow-y-auto">
             <button
               onClick={() => setTestModalOpen(false)}
               className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700"
@@ -340,14 +403,30 @@ export default function AdminMediaPage() {
                 </div>
               </div>
 
+              {/* Portrait Video Upload Component */}
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Portrait Video URL (MP4) *</label>
+                <MediaUploader
+                  mediaType="video"
+                  label="Portrait Video (9:16 vertical)"
+                  sublabel="Upload MP4 vertical reel to Firebase Storage"
+                  storageFolder="testimonials"
+                  currentUrl={testVideoUrl}
+                  maxSizeBytes={50 * 1024 * 1024}
+                  aspectRatio="portrait"
+                  placeholderText="Upload Portrait Video"
+                  onUploadSuccess={(url) => setTestVideoUrl(url)}
+                  onDelete={() => setTestVideoUrl('')}
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Portrait Video URL (Direct / Fallback)</label>
                 <input
                   type="url"
                   required
                   value={testVideoUrl}
                   onChange={(e) => setTestVideoUrl(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono"
                 />
               </div>
 
@@ -357,7 +436,7 @@ export default function AdminMediaPage() {
                   type="url"
                   value={testPosterUrl}
                   onChange={(e) => setTestPosterUrl(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono"
                 />
               </div>
 
@@ -381,9 +460,10 @@ export default function AdminMediaPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-pink-600 text-white font-bold"
+                  disabled={isSavingTest}
+                  className="px-5 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-bold shadow-md"
                 >
-                  Save Story
+                  {isSavingTest ? 'Saving Story...' : 'Save Story'}
                 </button>
               </div>
             </form>

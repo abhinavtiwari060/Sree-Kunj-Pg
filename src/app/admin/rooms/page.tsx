@@ -14,7 +14,7 @@ import {
   UploadCloud,
   AlertCircle
 } from 'lucide-react';
-import { uploadMediaToFirebase } from '@/lib/firebase';
+import { uploadMediaToFirebase, uploadMediaWithProgress } from '@/lib/firebase';
 
 export default function AdminRoomsPage() {
   const [rooms, setRooms] = useState<any[]>([]);
@@ -35,7 +35,14 @@ export default function AdminRoomsPage() {
   const [images, setImages] = useState<string[]>([]);
   const [newImageUrl, setNewImageUrl] = useState('');
   const [availability, setAvailability] = useState<'Available' | 'Pending' | 'Booked' | 'Unavailable'>('Available');
+  // Multi-upload state
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{ total: number; current: number; percent: number }>({
+    total: 0,
+    current: 0,
+    percent: 0,
+  });
+  const [uploadError, setUploadError] = useState<string>('');
 
   const fetchRooms = async () => {
     try {
@@ -65,6 +72,7 @@ export default function AdminRoomsPage() {
     setFacilitiesStr('Split AC, Attached Washroom, Wi-Fi 6, Wardrobe, Daily Housekeeping');
     setImages(['https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1000&q=80']);
     setAvailability('Available');
+    setUploadError('');
     setModalOpen(true);
   };
 
@@ -80,20 +88,38 @@ export default function AdminRoomsPage() {
     setFacilitiesStr(room.facilities ? room.facilities.join(', ') : '');
     setImages(room.images || []);
     setAvailability(room.availability || 'Available');
+    setUploadError('');
     setModalOpen(true);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
+    const fileList = Array.from(e.target.files);
     setIsUploading(true);
+    setUploadError('');
+    setUploadProgress({ total: fileList.length, current: 1, percent: 0 });
+
+    const newUrls: string[] = [];
+
     try {
-      const downloadUrl = await uploadMediaToFirebase(file, 'rooms');
-      setImages((prev) => [...prev, downloadUrl]);
-    } catch (err) {
-      alert('Upload failed: ' + (err as any).message);
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        setUploadProgress({ total: fileList.length, current: i + 1, percent: 0 });
+
+        const handle = uploadMediaWithProgress(file, `rooms/floor-${floor}`, (info) => {
+          setUploadProgress({ total: fileList.length, current: i + 1, percent: info.percent });
+        });
+
+        const url = await handle.promise;
+        newUrls.push(url);
+      }
+
+      setImages((prev) => [...prev, ...newUrls]);
+    } catch (err: any) {
+      setUploadError(err.message || 'Upload failed');
     } finally {
       setIsUploading(false);
+      if (e.target) e.target.value = '';
     }
   };
 
@@ -485,18 +511,42 @@ export default function AdminRoomsPage() {
                   </button>
                 </div>
 
+                {uploadError && (
+                  <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+                    <span>{uploadError}</span>
+                  </div>
+                )}
+
+                {isUploading && (
+                  <div className="p-3 bg-pink-50 border border-pink-200 rounded-xl space-y-1.5">
+                    <div className="flex justify-between text-[11px] font-bold text-pink-900">
+                      <span>Uploading {uploadProgress.current} of {uploadProgress.total}</span>
+                      <span>{uploadProgress.percent}%</span>
+                    </div>
+                    <div className="w-full bg-pink-200 h-2 rounded-full overflow-hidden">
+                      <div
+                        className="bg-pink-600 h-full transition-all duration-200"
+                        style={{ width: `${uploadProgress.percent}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="flex items-center gap-2">
-                  <label className="cursor-pointer px-3 py-1.5 rounded-xl bg-pink-100 text-pink-700 font-bold hover:bg-pink-200 transition-colors flex items-center gap-1.5">
-                    <UploadCloud className="w-4 h-4" />
-                    <span>{isUploading ? 'Uploading to Firebase...' : 'Upload Image File'}</span>
+                  <label className="cursor-pointer px-3.5 py-2 rounded-xl bg-pink-100 text-pink-700 font-bold hover:bg-pink-200 transition-colors flex items-center gap-1.5">
+                    <UploadCloud className="w-4 h-4 text-pink-600" />
+                    <span>{isUploading ? 'Uploading to Firebase...' : 'Upload Images to Firebase'}</span>
                     <input
                       type="file"
                       accept="image/*"
+                      multiple
                       onChange={handleFileUpload}
                       className="hidden"
                       disabled={isUploading}
                     />
                   </label>
+                  <span className="text-[10px] text-slate-400">Select one or multiple photos</span>
                 </div>
               </div>
 
