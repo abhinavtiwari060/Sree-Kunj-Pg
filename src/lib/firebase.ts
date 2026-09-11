@@ -9,12 +9,12 @@ import {
 } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'demo-api-key',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'girls-pg.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'girls-pg',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'girls-pg.firebasestorage.app',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '437602922888',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:437602922888:web:80954376c3e8db15d3ca3d',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyCkjMctMwFMolIvGyWlmGUll3hws_UW8f4',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'shreekung-376a7.firebaseapp.com',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'shreekung-376a7',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'shreekung-376a7.firebasestorage.app',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '642062794637',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:642062794637:web:4855ac290ef7bcb5bc87c4',
 };
 
 // Initialize Firebase only if valid or client-side
