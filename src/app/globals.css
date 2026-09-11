@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FFF5F7;
+    --foreground: #1E1B24;
+    --pink-lightest: #FFF8FA;
+    --pink-subtle: #FDE8EE;
+    --pink-glass: rgba(255, 255, 255, 0.82);
+    --pink-primary: #E11D53;
+    --pink-hover: #BE123E;
+    --pink-dark: #881337;
+    --pink-border: rgba(251, 113, 133, 0.28);
+  }
+
+  * {
+    border-color: rgba(244, 114, 182, 0.22);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color: #1E1B24;
+    background-color: #FFF5F7;
+  }
+
+  body {
+    background-color: #FFF5F7;
+    min-height: 100vh;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    overflow-x: hidden;
+  }
+}
+
+/* SOLID LIQUID GLASS DESIGN SYSTEM (ZERO GRADIENTS) */
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(254, 205, 211, 0.6);
+  box-shadow: 0 10px 30px -5px rgba(225, 29, 83, 0.06);
+}
+
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(254, 205, 211, 0.7);
+  box-shadow: 0 12px 32px 0 rgba(225, 29, 83, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  background-color: #FFFFFF;
+  border-color: rgba(244, 63, 114, 0.5);
+  box-shadow: 0 18px 40px -10px rgba(225, 29, 83, 0.12);
+}
+
+.glass-card-tinted {
+  background-color: #FFF1F5;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #FECDD3;
+}
+
+.glass-card-dark {
+  background-color: #1C1921;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.glass-input {
+  background-color: #FFFFFF;
+  border: 1.5px solid #FECDD3;
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  background-color: #FFFFFF;
+  border-color: #E11D53;
+  box-shadow: 0 0 0 3px rgba(225, 29, 83, 0.15);
+  outline: none;
+}
+
+/* SOLID BUTTON STYLES */
+.glass-button-primary {
+  background-color: #E11D53;
+  color: #FFFFFF;
+  border: 1px solid #BE123E;
+  box-shadow: 0 4px 14px 0 rgba(225, 29, 83, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-button-primary:hover {
+  background-color: #BE123E;
+  box-shadow: 0 6px 20px 0 rgba(190, 18, 62, 0.45);
+  transform: translateY(-2px);
+}
+
+.glass-button-primary:active {
+  background-color: #9F1239;
+  transform: translateY(0px);
+}
+
+.glass-button-secondary {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid #FDA4AF;
+  color: #BE123E;
+  transition: all 0.2s ease;
+}
+
+.glass-button-secondary:hover {
+  background-color: #FFF1F5;
+  border-color: #E11D53;
+  color: #881337;
+  transform: translateY(-2px);
+}
+
+.glass-button-subtle {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid #FECDD3;
+  color: #9F1239;
+  transition: all 0.2s ease;
+}
+
+.glass-button-subtle:hover {
+  background-color: #FFFFFF;
+  border-color: #E11D53;
+  color: #E11D53;
+}
+
+.solid-badge-pink {
+  background-color: #FFF1F5;
+  border: 1px solid #FECDD3;
+  color: #BE123E;
+}
+
+.solid-badge-strong {
+  background-color: #E11D53;
+  color: #FFFFFF;
+}
+
+/* Solid Ambient Shapes (Replaced blur gradients with clean solid translucent backdrop elements) */
+.ambient-bg-pink-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background-color: #FFE4EC;
+  filter: blur(60px);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-bg-pink-2 {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  background-color: #FCE7EC;
+  filter: blur(70px);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #FFF1F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #FDA4AF;
+  border-radius: 9999px;
+  border: 2px solid #FFF1F5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #E11D53;
+}

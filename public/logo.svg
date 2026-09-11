@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Background Circle -->
+  <circle cx="250" cy="210" r="160" fill="#FF4D8D"/>
+  
+  <!-- Girl Hair Back -->
+  <path d="M 130 250 C 110 200 120 120 200 90 C 270 65 350 90 370 170 C 390 250 360 300 360 300 C 360 300 330 270 320 240 C 300 170 200 170 180 240 C 170 270 140 300 140 300 Z" fill="#2B1810"/>
+  
+  <!-- Girl Face -->
+  <ellipse cx="250" cy="225" rx="105" ry="95" fill="#FFE0BD"/>
+  
+  <!-- Hair Top & Bangs -->
+  <path d="M 150 170 C 180 140 230 145 250 160 C 270 145 320 140 350 170 C 340 120 290 100 250 100 C 210 100 160 120 150 170 Z" fill="#2B1810"/>
+  <path d="M 145 170 C 150 220 170 240 180 250 C 175 220 175 190 185 175 Z" fill="#2B1810"/>
+  <path d="M 355 170 C 350 220 330 240 320 250 C 325 220 325 190 315 175 Z" fill="#2B1810"/>
+  
+  <!-- Headband & Bow -->
+  <path d="M 160 145 C 200 125 300 125 340 145" stroke="#FF2A7A" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <!-- Bow -->
+  <ellipse cx="230" cy="95" rx="25" ry="18" fill="#FF85B3" transform="rotate(-15 230 95)"/>
+  <ellipse cx="270" cy="95" rx="25" ry="18" fill="#FF85B3" transform="rotate(15 270 95)"/>
+  <circle cx="250" cy="95" r="14" fill="#FF2A7A"/>
+
+  <!-- Eyes (Happy Big Eyes) -->
+  <ellipse cx="205" cy="205" rx="18" ry="22" fill="#2B1810"/>
+  <circle cx="200" cy="198" r="7" fill="#FFFFFF"/>
+  <circle cx="212" cy="212" r="3.5" fill="#FFFFFF"/>
+  <path d="M 190 180 C 200 172 220 172 225 180" stroke="#2B1810" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <ellipse cx="295" cy="205" rx="18" ry="22" fill="#2B1810"/>
+  <circle cx="290" cy="198" r="7" fill="#FFFFFF"/>
+  <circle cx="302" cy="212" r="3.5" fill="#FFFFFF"/>
+  <path d="M 275 180 C 280 172 300 172 310 180" stroke="#2B1810" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+  <!-- Nose -->
+  <path d="M 248 215 C 252 222 250 226 245 227" stroke="#E89774" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Blush Cheeks with Heart -->
+  <path d="M 175 235 C 170 230 162 235 162 240 C 162 248 175 255 175 255 C 175 255 188 248 188 240 C 188 235 180 230 175 235 Z" fill="#FF85A2"/>
+  <path d="M 325 235 C 320 230 312 235 312 240 C 312 248 325 255 325 255 C 325 255 338 248 338 240 C 338 235 330 230 325 235 Z" fill="#FF85A2"/>
+
+  <!-- Big Bright Smile -->
+  <path d="M 205 240 C 205 285 295 285 295 240 Z" fill="#FFFFFF" stroke="#2B1810" stroke-width="5"/>
+  <!-- Braces / Sparkle -->
+  <path d="M 210 252 C 240 262 260 262 290 252" stroke="#B0C4DE" stroke-width="3" fill="none"/>
+  <polygon points="305,245 310,250 305,255 300,250" fill="#FFFFFF"/>
+  <polygon points="318,252 322,256 318,260 314,256" fill="#FFFFFF"/>
+
+  <!-- Dress Collar -->
+  <path d="M 190 310 C 210 330 250 330 250 330 C 250 330 290 330 310 310 L 330 360 L 170 360 Z" fill="#FF2A7A"/>
+  <path d="M 200 310 C 225 325 245 325 250 320 C 245 325 225 325 200 310" fill="#FFAEC9"/>
+  <ellipse cx="225" cy="320" rx="25" ry="12" fill="#FFAEC9"/>
+  <ellipse cx="275" cy="320" rx="25" ry="12" fill="#FFAEC9"/>
+</svg>
