@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getTestimonials, getAllTestimonialsAdmin, createTestimonial } from '@/lib/dataService';
 import { getAdminFromRequest } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
+
 export async function GET(req: NextRequest) {
   try {
     const admin = getAdminFromRequest(req);

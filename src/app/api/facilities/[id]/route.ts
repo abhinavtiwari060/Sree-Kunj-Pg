@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { updateFacility, deleteFacility } from '@/lib/dataService';
 import { getAdminFromRequest } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }

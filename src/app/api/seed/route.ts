@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { ensureDbSeeded } from '@/lib/dataService';
 
+export const dynamic = 'force-dynamic';
+
+
 export async function POST() {
   try {
     await ensureDbSeeded();

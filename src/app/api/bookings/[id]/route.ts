@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { updateBookingStatus } from '@/lib/dataService';
 import { getAdminFromRequest } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
