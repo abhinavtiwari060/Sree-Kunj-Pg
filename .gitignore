@@ -43,3 +43,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+test_*.mp4
+test_*.png
+test_*.jpg
+

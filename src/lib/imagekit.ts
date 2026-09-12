@@ -146,10 +146,30 @@ export function uploadToImageKit(
 
     try {
       const authRes = await fetch('/api/imagekit/auth');
+      const contentType = authRes.headers.get('content-type') || '';
+
       if (!authRes.ok) {
-        const errData = await authRes.json().catch(() => ({}));
-        throw new Error(errData.error || `Auth endpoint returned ${authRes.status}`);
+        // Avoid calling .json() on HTML error pages (e.g. Netlify 404)
+        if (contentType.includes('application/json')) {
+          const errData = await authRes.json().catch(() => ({}));
+          throw new Error(errData.error || `Auth endpoint returned HTTP ${authRes.status}`);
+        }
+        throw new Error(
+          `Auth endpoint returned HTTP ${authRes.status}. ` +
+          `Ensure /api/imagekit/auth is deployed as a server-side function ` +
+          `(check netlify.toml / @netlify/plugin-nextjs).`
+        );
       }
+
+      if (!contentType.includes('application/json')) {
+        const body = await authRes.text();
+        throw new Error(
+          `Auth endpoint returned non-JSON response (${contentType}). ` +
+          `This usually means the Next.js API route is not running server-side on Netlify. ` +
+          `Add a netlify.toml with @netlify/plugin-nextjs. Preview: ${body.slice(0, 120)}`
+        );
+      }
+
       authParams = await authRes.json();
     } catch (err: any) {
       reject(

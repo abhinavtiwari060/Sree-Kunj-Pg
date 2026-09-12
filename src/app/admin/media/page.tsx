@@ -87,7 +87,10 @@ export default function AdminMediaPage() {
         setHeroSaveSuccess(true);
         setTimeout(() => setHeroSaveSuccess(false), 3500);
       } else {
-        const err = await res.json();
+        const ct = res.headers.get('content-type') || '';
+        const err = ct.includes('application/json')
+          ? await res.json().catch(() => ({}))
+          : { error: `Server returned HTTP ${res.status}. API route may not be server-side on Netlify.` };
         alert('Failed to save Hero Media to database: ' + (err.error || 'Server error'));
       }
     } catch (e: any) {
