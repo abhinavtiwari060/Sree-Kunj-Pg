@@ -330,6 +330,7 @@ export const uploadMediaToFirebase = uploadMediaToImageKit;
 /**
  * Build an optimised ImageKit CDN URL with transformations.
  * Falls back to the raw URL if no endpoint is configured.
+ * NOTE: Never strips audio tracks (preserves full audio stream).
  */
 export function buildImageKitUrl(
   filePath: string,
@@ -357,3 +358,50 @@ export function buildImageKitUrl(
   const cleanPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
   return `${urlEndpoint}/${trStr}${cleanPath.slice(1)}`;
 }
+
+/**
+ * Resolves an optimal video poster/cover image:
+ * 1. Returns customPosterUrl if provided and non-empty.
+ * 2. If videoUrl is an ImageKit URL, automatically extracts a high-quality video frame at 1 sec (tr:so-1).
+ * 3. Falls back to a clean default campus cover image.
+ */
+export function getImageKitVideoThumbnail(
+  videoUrl?: string,
+  customPosterUrl?: string,
+  fallbackUrl: string = 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=75'
+): string {
+  if (customPosterUrl && customPosterUrl.trim().length > 0) {
+    return customPosterUrl.trim();
+  }
+
+  if (!videoUrl || !videoUrl.trim()) {
+    return fallbackUrl;
+  }
+
+  const cleanVideoUrl = videoUrl.trim();
+
+  // If this is an ImageKit video URL (ik.imagekit.io), generate thumbnail frame at second 1 (so-1)
+  if (cleanVideoUrl.includes('ik.imagekit.io')) {
+    try {
+      const urlObj = new URL(cleanVideoUrl);
+      const pathname = urlObj.pathname;
+
+      if (pathname.includes('/tr:')) {
+        return cleanVideoUrl.replace(/\.(mp4|webm|mov|mkv|ogg)$/i, '.jpg');
+      }
+
+      const pathSegments = pathname.split('/');
+      if (pathSegments.length >= 3) {
+        const imageKitId = pathSegments[1];
+        const restOfPath = pathSegments.slice(2).join('/');
+        const thumbPath = restOfPath.replace(/\.(mp4|webm|mov|mkv|ogg)$/i, '.jpg');
+        return `${urlObj.origin}/${imageKitId}/tr:so-1,q-80/${thumbPath}`;
+      }
+    } catch {
+      // fallback on error
+    }
+  }
+
+  return fallbackUrl;
+}
+

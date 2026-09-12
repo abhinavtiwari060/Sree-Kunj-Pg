@@ -433,12 +433,29 @@ export default function AdminMediaPage() {
                 />
               </div>
 
+              {/* Custom Poster Image Upload Component */}
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Poster Image URL (Optional)</label>
+                <MediaUploader
+                  mediaType="image"
+                  label="Custom Poster / Thumbnail Image (Optional)"
+                  sublabel="Upload a custom cover image to ImageKit. If left blank, an automatic video frame is generated."
+                  storageFolder="testimonials"
+                  currentUrl={testPosterUrl}
+                  maxSizeBytes={10 * 1024 * 1024}
+                  aspectRatio="portrait"
+                  placeholderText="Upload Custom Video Poster (JPG/PNG/WebP)"
+                  onUploadSuccess={(url) => setTestPosterUrl(url)}
+                  onDelete={() => setTestPosterUrl('')}
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Poster Image URL (Direct / Fallback)</label>
                 <input
                   type="url"
                   value={testPosterUrl}
                   onChange={(e) => setTestPosterUrl(e.target.value)}
+                  placeholder="https://ik.imagekit.io/... or leave empty for auto thumbnail"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-mono"
                 />
               </div>

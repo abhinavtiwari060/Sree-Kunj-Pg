@@ -8,13 +8,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Play,
+  Pause,
   Volume2,
   VolumeX,
   GraduationCap,
   Quote,
-  BadgeInfo
+  BadgeInfo,
 } from 'lucide-react';
 import { defaultTestimonials } from '@/lib/sampleData';
+import { getImageKitVideoThumbnail } from '@/lib/imagekit';
 
 export interface TestimonialItem {
   _id?: string;
@@ -36,7 +38,8 @@ interface TestimonialStackProps {
 export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false); // Default to unmuted on user play
+  const [hasInteracted, setHasInteracted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Fallback to rich demo testimonials if empty
@@ -48,34 +51,73 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
   const current = activeTestimonials[currentIndex % activeTestimonials.length];
 
   const handleNext = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
     setIsPlaying(false);
     setCurrentIndex((prev) => (prev + 1) % activeTestimonials.length);
   };
 
   const handlePrev = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
     setIsPlaying(false);
     setCurrentIndex((prev) => (prev - 1 + activeTestimonials.length) % activeTestimonials.length);
   };
 
-  const toggleVideoPlay = () => {
+  // Reset video state when slide changes
+  useEffect(() => {
+    setIsPlaying(false);
     if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        videoRef.current
-          .play()
-          .then(() => setIsPlaying(true))
-          .catch(() => setIsPlaying(false));
-      }
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  }, [currentIndex]);
+
+  const toggleVideoPlay = () => {
+    if (!videoRef.current) return;
+
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      setHasInteracted(true);
+      // User-initiated action allows unmuted playback
+      videoRef.current.muted = isMuted;
+      videoRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          // If browser strictly blocks unmuted play without prior sound gesture, retry muted
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            setIsMuted(true);
+            videoRef.current
+              .play()
+              .then(() => setIsPlaying(true))
+              .catch(() => setIsPlaying(false));
+          }
+        });
     }
   };
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+    if (!videoRef.current) return;
+
+    const nextMuted = !isMuted;
+    videoRef.current.muted = nextMuted;
+    setIsMuted(nextMuted);
+
+    // If video was paused, starting playback on mute button click
+    if (!isPlaying) {
+      videoRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
     }
   };
 
@@ -102,7 +144,7 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-semibold text-pink-800">
             <BadgeInfo className="w-3.5 h-3.5 text-pink-600" />
-            <span>Sample resident experiences shown for preview during admission cycle</span>
+            <span>Watch genuine student reviews with authentic sound & video tours</span>
           </div>
         </div>
 
@@ -121,6 +163,7 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
 
                 const isFront = position === 0;
                 const isSecond = position === 1;
+                const posterImg = getImageKitVideoThumbnail(item.videoUrl, item.posterUrl);
 
                 return (
                   <motion.div
@@ -149,36 +192,58 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
                         <video
                           ref={videoRef}
                           src={item.videoUrl}
-                          poster={item.posterUrl}
+                          poster={posterImg}
                           playsInline
                           loop
-                          preload="none"
+                          preload="metadata"
                           muted={isMuted}
+                          onPlay={() => setIsPlaying(true)}
+                          onPause={() => setIsPlaying(false)}
+                          onVolumeChange={() => {
+                            if (videoRef.current) {
+                              setIsMuted(videoRef.current.muted);
+                            }
+                          }}
                           className="w-full h-full object-cover"
                         />
 
                         {/* Instant Poster Fallback Overlay */}
-                        {item.posterUrl && !isPlaying && (
+                        {posterImg && !isPlaying && (
                           <img
-                            src={item.posterUrl}
+                            src={posterImg}
                             alt={item.name}
                             loading="eager"
                             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                           />
                         )}
 
-                        {/* Top Resident Badge */}
+                        {/* Top Resident Badge & Interactive Sound Control */}
                         <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-20">
                           <span className="px-3 py-1 rounded-full bg-black/65 backdrop-blur-xs text-white text-xs font-bold border border-white/20">
                             {item.name}
                           </span>
 
                           <button
+                            type="button"
                             onClick={toggleMute}
-                            className="p-1.5 rounded-full bg-black/65 backdrop-blur-xs text-white hover:bg-black/85 transition-colors"
-                            aria-label="Toggle mute"
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-md ${
+                              isMuted
+                                ? 'bg-black/75 hover:bg-black/90 text-white border border-white/20'
+                                : 'bg-pink-600 hover:bg-pink-700 text-white border border-pink-400 animate-pulse'
+                            }`}
+                            aria-label={isMuted ? 'Unmute video audio' : 'Mute video audio'}
                           >
-                            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-pink-400" />}
+                            {isMuted ? (
+                              <>
+                                <VolumeX className="w-3.5 h-3.5 text-pink-300" />
+                                <span className="text-[11px]">Unmute</span>
+                              </>
+                            ) : (
+                              <>
+                                <Volume2 className="w-3.5 h-3.5 text-white" />
+                                <span className="text-[11px]">Sound On</span>
+                              </>
+                            )}
                           </button>
                         </div>
 
@@ -187,13 +252,21 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
                           onClick={toggleVideoPlay}
                           className="absolute inset-0 flex items-center justify-center z-10 cursor-pointer"
                         >
-                          {!isPlaying && (
+                          {!isPlaying ? (
                             <motion.div
                               whileHover={{ scale: 1.1 }}
-                              className="w-14 h-14 rounded-full bg-pink-600 text-white flex items-center justify-center shadow-lg shadow-pink-600/50"
+                              whileTap={{ scale: 0.95 }}
+                              className="w-16 h-16 rounded-full bg-pink-600 text-white flex items-center justify-center shadow-xl shadow-pink-600/50 hover:bg-pink-700 transition-colors"
+                              aria-label="Play video review with sound"
                             >
-                              <Play className="w-6 h-6 translate-x-0.5 fill-current" />
+                              <Play className="w-7 h-7 translate-x-0.5 fill-current" />
                             </motion.div>
+                          ) : (
+                            <div className="opacity-0 hover:opacity-100 transition-opacity w-full h-full flex items-center justify-center bg-black/20">
+                              <div className="w-12 h-12 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur-xs">
+                                <Pause className="w-6 h-6 fill-current" />
+                              </div>
+                            </div>
                           )}
                         </div>
 
@@ -212,9 +285,9 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
                     ) : (
                       /* Stacked cards only load lightweight poster images */
                       <div className="relative w-full h-full bg-slate-900">
-                        {item.posterUrl ? (
+                        {posterImg ? (
                           <img
-                            src={item.posterUrl}
+                            src={posterImg}
                             alt={item.name}
                             loading="lazy"
                             decoding="async"
