@@ -28,24 +28,32 @@ export const Hero: React.FC<HeroProps> = ({
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
-    // Defer video auto-play slightly so critical above-the-fold content paints instantly
-    const timer = setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current
-          .play()
-          .then(() => {
-            setIsPlaying(true);
-            setVideoLoaded(true);
-          })
-          .catch(() => {
-            // Browser autoplay policy or low data mode
-            setIsPlaying(false);
-          });
-      }
-    }, 400);
+    const video = videoRef.current;
+    if (!video) return;
 
-    return () => clearTimeout(timer);
-  }, []);
+    video.muted = true;
+    video.defaultMuted = true;
+
+    const startPlay = () => {
+      video
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          setVideoLoaded(true);
+        })
+        .catch(() => {
+          setIsPlaying(false);
+        });
+    };
+
+    startPlay();
+
+    // Re-trigger playback if paused unexpectedly or loaded
+    video.addEventListener('canplay', startPlay);
+    return () => {
+      video.removeEventListener('canplay', startPlay);
+    };
+  }, [videoUrl]);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -53,6 +61,7 @@ export const Hero: React.FC<HeroProps> = ({
         videoRef.current.pause();
         setIsPlaying(false);
       } else {
+        videoRef.current.muted = true;
         videoRef.current
           .play()
           .then(() => setIsPlaying(true))
@@ -184,11 +193,14 @@ export const Hero: React.FC<HeroProps> = ({
                   ref={videoRef}
                   src={videoUrl}
                   poster={posterUrl}
-                  preload="metadata"
+                  autoPlay
                   loop
                   muted
                   playsInline
+                  preload="auto"
                   onLoadedData={() => setVideoLoaded(true)}
+                  onPlaying={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
                   className="w-full h-full object-cover"
                 />
 
