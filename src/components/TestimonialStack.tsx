@@ -83,15 +83,18 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
       setIsPlaying(false);
     } else {
       setHasInteracted(true);
-      // User-initiated action allows unmuted playback
-      videoRef.current.muted = isMuted;
+      // User click explicitly enables audio playback
+      videoRef.current.muted = false;
+      videoRef.current.volume = 1.0;
+      setIsMuted(false);
+
       videoRef.current
         .play()
         .then(() => {
           setIsPlaying(true);
         })
-        .catch(() => {
-          // If browser strictly blocks unmuted play without prior sound gesture, retry muted
+        .catch((err) => {
+          console.warn('Playback with audio blocked by browser, falling back to muted:', err);
           if (videoRef.current) {
             videoRef.current.muted = true;
             setIsMuted(true);
@@ -110,9 +113,10 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
 
     const nextMuted = !isMuted;
     videoRef.current.muted = nextMuted;
+    videoRef.current.volume = nextMuted ? 0 : 1.0;
     setIsMuted(nextMuted);
 
-    // If video was paused, starting playback on mute button click
+    // If video was paused, start playback on sound toggle
     if (!isPlaying) {
       videoRef.current
         .play()

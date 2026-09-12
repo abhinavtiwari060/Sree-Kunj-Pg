@@ -362,7 +362,7 @@ export function buildImageKitUrl(
 /**
  * Resolves an optimal video poster/cover image:
  * 1. Returns customPosterUrl if provided and non-empty.
- * 2. If videoUrl is an ImageKit URL, automatically extracts a high-quality video frame at 1 sec (tr:so-1).
+ * 2. If videoUrl is an ImageKit URL, automatically extracts a high-quality video frame via /ik-thumbnail.jpg.
  * 3. Falls back to a clean default campus cover image.
  */
 export function getImageKitVideoThumbnail(
@@ -380,23 +380,16 @@ export function getImageKitVideoThumbnail(
 
   const cleanVideoUrl = videoUrl.trim();
 
-  // If this is an ImageKit video URL (ik.imagekit.io), generate thumbnail frame at second 1 (so-1)
+  // If this is an ImageKit video URL (ik.imagekit.io), generate thumbnail frame via /ik-thumbnail.jpg
   if (cleanVideoUrl.includes('ik.imagekit.io')) {
     try {
-      const urlObj = new URL(cleanVideoUrl);
-      const pathname = urlObj.pathname;
-
-      if (pathname.includes('/tr:')) {
-        return cleanVideoUrl.replace(/\.(mp4|webm|mov|mkv|ogg)$/i, '.jpg');
+      if (
+        /\.(jpg|jpeg|png|webp|avif)$/i.test(cleanVideoUrl) ||
+        cleanVideoUrl.endsWith('/ik-thumbnail.jpg')
+      ) {
+        return cleanVideoUrl;
       }
-
-      const pathSegments = pathname.split('/');
-      if (pathSegments.length >= 3) {
-        const imageKitId = pathSegments[1];
-        const restOfPath = pathSegments.slice(2).join('/');
-        const thumbPath = restOfPath.replace(/\.(mp4|webm|mov|mkv|ogg)$/i, '.jpg');
-        return `${urlObj.origin}/${imageKitId}/tr:so-1,q-80/${thumbPath}`;
-      }
+      return `${cleanVideoUrl.replace(/\/$/, '')}/ik-thumbnail.jpg`;
     } catch {
       // fallback on error
     }
@@ -404,4 +397,5 @@ export function getImageKitVideoThumbnail(
 
   return fallbackUrl;
 }
+
 

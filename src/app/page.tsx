@@ -2,8 +2,10 @@ import React from 'react';
 import { getRooms, getFacilities, getTestimonials, getSettings } from '@/lib/dataService';
 import { PublicPageClient } from './PublicPageClient';
 
-// Enable ISR revalidation for instantaneous TTFB server response
-export const revalidate = 60;
+// Force dynamic server rendering to guarantee real-time updates from database
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 export default async function HomePage() {
   const [rooms, facilities, testimonials, settings] = await Promise.all([

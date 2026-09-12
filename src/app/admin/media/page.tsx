@@ -114,10 +114,10 @@ export default function AdminMediaPage() {
   const openCreateTestimonial = () => {
     setEditingTest(null);
     setTestName('');
-    setTestUniversity('JECRC University • B.Tech CSE');
-    setTestVideoUrl('https://assets.mixkit.co/videos/preview/mixkit-young-woman-taking-notes-on-a-desk-41566-large.mp4');
-    setTestPosterUrl('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80');
-    setTestText('Living at Sree Kunj Girls PG for the past 2 years has made my college life so peaceful. 2 mins walk to JECRC campus!');
+    setTestUniversity('JECRC University');
+    setTestVideoUrl('');
+    setTestPosterUrl('');
+    setTestText('Living at Sree Kunj Girls PG has made my college life so peaceful and secure!');
     setTestRating(5);
     setTestModalOpen(true);
   };
