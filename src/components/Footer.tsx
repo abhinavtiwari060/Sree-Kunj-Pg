@@ -12,9 +12,9 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({
-  pgName = 'Sree Kunj Girls PG',
+  pgName = 'Shri Kunj Girls PG',
   contactPhone = '+91 89573 56189',
-  contactEmail = 'admissions@sreekunjgirlspg.com',
+  contactEmail = 'admissions@shrikunjgirlspg.com',
   address = 'Plot 42, Institutional Corridor, Near JECRC University Gate, Sitapura Industrial Area, Jaipur, Rajasthan 302022',
 }) => {
   const developerPortfolioUrl =
@@ -33,11 +33,11 @@ export const Footer: React.FC<FooterProps> = ({
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-pink-100 border border-pink-300 p-1 shadow-xs overflow-hidden flex items-center justify-center shrink-0">
-                <img src="/logo.svg" alt="Sree Kunj Girls PG Logo" className="w-full h-full object-contain" />
+                <img src="/logo.svg" alt="Shri Kunj Girls PG Logo" className="w-full h-full object-contain" />
               </div>
               <div>
                 <span className="font-extrabold text-xl tracking-tight text-slate-900 block leading-tight">
-                  Sree Kunj <span className="text-pink-600">Girls PG</span>
+                  Shri Kunj <span className="text-pink-600">Girls PG</span>
                 </span>
                 <span className="text-[11px] font-bold text-pink-700 uppercase tracking-wider block mt-0.5">
                   Near JECRC & Poornima University • Jaipur

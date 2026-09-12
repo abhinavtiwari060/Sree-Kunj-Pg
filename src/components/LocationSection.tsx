@@ -19,7 +19,7 @@ interface LocationSectionProps {
 export const LocationSection: React.FC<LocationSectionProps> = ({
   address = 'Plot 42, Institutional Corridor, Near JECRC University Gate, Sitapura Industrial Area, Jaipur, Rajasthan 302022',
   contactPhone = '+91 89573 56189',
-  contactEmail = 'admissions@sreekunjgirlspg.com',
+  contactEmail = 'admissions@shrikunjgirlspg.com',
   googleMapsEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3561.427771746247!2d75.8761168!3d26.7945037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396dc9bd0b3eb2b3%3A0x7d6fcf4a572c65a4!2sJECRC%20University!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin',
   googleMapsDirectionsUrl = 'https://maps.google.com/?q=JECRC+University+Jaipur',
   nearbyColleges = [
@@ -63,7 +63,7 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Sree Kunj Girls PG Location Map"
+                  title="Shri Kunj Girls PG Location Map"
                   className="w-full h-full"
                 />
               ) : (

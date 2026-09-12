@@ -46,13 +46,13 @@ export const WhyChooseUs: React.FC = () => {
           <div className="lg:col-span-5 space-y-5">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full solid-badge-pink text-xs font-bold tracking-wider uppercase">
               <Sparkles className="w-3.5 h-3.5 text-pink-600" />
-              The Sree Kunj Advantage
+              The Shri Kunj Advantage
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
               Why Jaipur’s Students <span className="text-pink-600">Choose Us</span>
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              We understand the transition of moving to Jaipur for higher education. Sree Kunj Girls PG is designed from the ground up to offer warmth, uncompromising safety, and an empowering study atmosphere.
+              We understand the transition of moving to Jaipur for higher education. Shri Kunj Girls PG is designed from the ground up to offer warmth, uncompromising safety, and an empowering study atmosphere.
             </p>
 
             <div className="space-y-2.5 pt-1">

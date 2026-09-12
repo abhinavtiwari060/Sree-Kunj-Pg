@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
             <Lock className="w-6 h-6" />
           </div>
           <h1 className="text-2xl font-black text-white tracking-tight">
-            Sree Kunj <span className="text-pink-500">Admin Portal</span>
+            Shri Kunj <span className="text-pink-500">Admin Portal</span>
           </h1>
           <p className="text-xs text-slate-400">
             Secure Management Console • Jaipur
@@ -116,7 +116,7 @@ export default function AdminLoginPage() {
 
         <div className="mt-8 pt-4 border-t border-slate-800 text-center">
           <p className="text-[11px] text-slate-400">
-            Protected with JWT Authentication • Sree Kunj Girls PG
+            Protected with JWT Authentication • Shri Kunj Girls PG
           </p>
         </div>
 

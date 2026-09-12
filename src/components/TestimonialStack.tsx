@@ -143,7 +143,7 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
             Hear From Girls Living Near <span className="text-pink-600">JECRC & Poornima</span>
           </h2>
           <p className="text-slate-600 text-sm sm:text-base">
-            Explore preview video tours and student experiences representing life at Sree Kunj Girls PG Jaipur.
+            Explore preview video tours and student experiences representing life at Shri Kunj Girls PG Jaipur.
           </p>
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-50 border border-pink-200 text-[11px] font-semibold text-pink-800">
@@ -338,7 +338,7 @@ export const TestimonialStack: React.FC<TestimonialStackProps> = ({ testimonials
 
                 {/* Testimonial Quote */}
                 <p className="text-base sm:text-lg font-medium text-slate-800 leading-relaxed italic">
-                  “{current.text || 'Living at Sree Kunj Girls PG has been a peaceful and secure experience close to university.'}”
+                  “{current.text || 'Living at Shri Kunj Girls PG has been a peaceful and secure experience close to university.'}”
                 </p>
 
                 {/* Student Bio */}

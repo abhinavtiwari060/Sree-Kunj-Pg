@@ -1,11 +1,11 @@
 export const defaultSettings = {
-  pgName: 'Sree Kunj Girls PG',
+  pgName: 'Shri Kunj Girls PG',
   tagline: 'Safe, Serene & Luxurious Accommodation for Women',
   description:
-    'Sree Kunj Girls PG offers premium student living tailored for scholars and young professionals attending JECRC University, Poornima University, and surrounding institutions in Jaipur. Designed with 24/7 security, high-speed Wi-Fi, chef-prepared hygienic meals, and pristine air-conditioned living spaces across 4 dedicated floors.',
+    'Shri Kunj Girls PG offers premium student living tailored for scholars and young professionals attending JECRC University, Poornima University, and surrounding institutions in Jaipur. Designed with 24/7 security, high-speed Wi-Fi, chef-prepared hygienic meals, and pristine air-conditioned living spaces across 4 dedicated floors.',
   whatsappNumber: '918957356189',
   contactPhone: '+91 98765 43210',
-  contactEmail: 'admissions@sreekunjgirlspg.com',
+  contactEmail: 'admissions@shrikunjgirlspg.com',
   address: 'Plot 42, Institutional Corridor, Near JECRC University Gate, Sitapura Industrial Area, Jaipur, Rajasthan 302022',
   city: 'Jaipur',
   state: 'Rajasthan',
@@ -21,13 +21,14 @@ export const defaultSettings = {
   googleMapsDirectionsUrl: 'https://maps.google.com/?q=JECRC+University+Jaipur',
   heroVideoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-living-room-with-a-view-41484-large.mp4',
   heroPosterUrl: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1920&q=80',
-  heroHeading: 'Sree Kunj Girls PG',
+  heroHeading: 'Shri Kunj Girls PG',
   heroSubheading:
     'Discover an oasis of peace, safety, and elegance near JECRC & Poornima University. Fully furnished 4-floor residences with high-speed fiber, biometric entry, and organic dining.',
   heroBadge: 'Girls PG in Jaipur • Near JECRC & Poornima',
-  seoTitle: 'Sree Kunj Girls PG Jaipur | Luxury Girls Accommodation Near JECRC & Poornima University',
+  seoTitle: 'Shri Kunj Girls PG Jaipur | Luxury Girls Accommodation Near JECRC & Poornima University',
   seoDescription:
     'Experience Jaipur’s most premium Girls PG near JECRC and Poornima University. 4 floors of AC/Non-AC rooms, 24/7 security, high-speed Wi-Fi, chef meals & video tour booking.',
+
   seoKeywords: [
     'Girls PG near JECRC',
     'Girls PG near JECRC University',
@@ -327,7 +328,7 @@ export const defaultTestimonials = [
     university: 'JECRC University • B.Tech AI & DS (3rd Year)',
     videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-young-woman-taking-notes-on-a-desk-41566-large.mp4',
     posterUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-    text: 'Living at Sree Kunj Girls PG for the past 2 years has made my college life so peaceful. It’s just 2 minutes walk to JECRC campus, and the food actually tastes like home cooked meals!',
+    text: 'Living at Shri Kunj Girls PG for the past 2 years has made my college life so peaceful. It’s just 2 minutes walk to JECRC campus, and the food actually tastes like home cooked meals!',
     rating: 5,
     order: 1,
     active: true,

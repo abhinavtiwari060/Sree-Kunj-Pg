@@ -135,7 +135,7 @@ export const InquirySection: React.FC<InquirySectionProps> = ({ whatsappNumber }
                 name: 'Student / Parent',
                 phone: '',
                 inquiryType: 'Room Availability near JECRC & Poornima',
-                message: 'Hello Sree Kunj Girls PG, I would like to inquire about room availability and fee structure.',
+                message: 'Hello Shri Kunj Girls PG, I would like to inquire about room availability and fee structure.',
               })}
               target="_blank"
               rel="noopener noreferrer"

@@ -33,7 +33,7 @@ export function buildWhatsAppBookingUrl(
   details: BookingWhatsAppDetails
 ): string {
   const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
-  const text = `Hello Sree Kunj Girls PG,
+  const text = `Hello Shri Kunj Girls PG,
 
 I have submitted a room booking request on your website.
 
@@ -56,7 +56,7 @@ export function buildWhatsAppVisitUrl(
   details: VisitWhatsAppDetails
 ): string {
   const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
-  const text = `Hello Sree Kunj Girls PG,
+  const text = `Hello Shri Kunj Girls PG,
 
 I would like to schedule a PG visit.
 
@@ -77,7 +77,7 @@ export function buildWhatsAppGeneralUrl(
   details: InquiryWhatsAppDetails
 ): string {
   const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
-  const text = `Hello Sree Kunj Girls PG,
+  const text = `Hello Shri Kunj Girls PG,
 
 I have an inquiry regarding accommodation near JECRC / Poornima University.
 

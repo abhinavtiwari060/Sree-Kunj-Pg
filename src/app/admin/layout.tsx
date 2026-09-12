@@ -89,7 +89,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <div>
               <span className="font-bold text-white text-base tracking-tight block">
-                Sree Kunj PG Admin
+                Shri Kunj PG Admin
               </span>
               <span className="text-[10px] text-pink-400 font-semibold tracking-wider uppercase">
                 Management Suite

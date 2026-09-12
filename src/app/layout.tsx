@@ -10,11 +10,11 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'Sree Kunj Girls PG Jaipur | Premium Accommodation Near JECRC & Poornima University',
+  title: 'Shri Kunj Girls PG Jaipur | Premium Accommodation Near JECRC & Poornima University',
   description:
-    'Sree Kunj Girls PG in Sitapura, Jaipur. 4 floors of AC & Non-AC luxury rooms near JECRC & Poornima University. 24/7 female security, Wi-Fi 6, chef meals & video visit booking.',
+    'Shri Kunj Girls PG in Sitapura, Jaipur. 4 floors of AC & Non-AC luxury rooms near JECRC & Poornima University. 24/7 female security, Wi-Fi 6, chef meals & video visit booking.',
   keywords: [
-    'Sree Kunj Girls PG',
+    'Shri Kunj Girls PG',
     'Girls PG near JECRC',
     'Girls PG near JECRC University',
     'Girls PG near Poornima University',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     'Girls PG near me in Jaipur',
     'Sitapura Girls PG',
   ],
-  authors: [{ name: 'Sree Kunj Girls PG' }],
+  authors: [{ name: 'Shri Kunj Girls PG' }],
   robots: {
     index: true,
     follow: true,
@@ -41,22 +41,22 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: 'https://sreekunjgirlspg.com',
-    title: 'Sree Kunj Girls PG Jaipur | Near JECRC & Poornima University',
+    title: 'Shri Kunj Girls PG Jaipur | Near JECRC & Poornima University',
     description:
       'Premier 4-floor student residence for girls in Sitapura, Jaipur. 24/7 biometric security, AC rooms, high-speed Wi-Fi 6, and organic vegetarian dining.',
-    siteName: 'Sree Kunj Girls PG',
+    siteName: 'Shri Kunj Girls PG',
     images: [
       {
         url: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80',
         width: 1200,
         height: 630,
-        alt: 'Sree Kunj Girls PG Jaipur',
+        alt: 'Shri Kunj Girls PG Jaipur',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sree Kunj Girls PG Jaipur | Near JECRC & Poornima',
+    title: 'Shri Kunj Girls PG Jaipur | Near JECRC & Poornima',
     description: 'Safe, Serene & Luxurious Accommodation for Women in Jaipur.',
     images: ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80'],
   },
@@ -84,10 +84,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': ['LodgingBusiness', 'LocalBusiness'],
-              name: 'Sree Kunj Girls PG',
+              name: 'Shri Kunj Girls PG',
               image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80',
               telephone: '+91 89573 56189',
-              email: 'admissions@sreekunjgirlspg.com',
+              email: 'admissions@shrikunjgirlspg.com',
               address: {
                 '@type': 'PostalAddress',
                 streetAddress: 'Plot 42, Institutional Corridor, Sitapura Industrial Area',

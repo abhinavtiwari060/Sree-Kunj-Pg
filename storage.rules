@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Firebase Storage Security Rules for Sree Kunj Girls PG
+// Firebase Storage Security Rules for Shri Kunj Girls PG
 // Secure, path-restricted rules: prevents public write while allowing authorized media uploads
 service firebase.storage {
   match /b/{bucket}/o {

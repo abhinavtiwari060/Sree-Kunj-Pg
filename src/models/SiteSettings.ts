@@ -31,16 +31,16 @@ export interface ISiteSettings extends Document {
 
 const SiteSettingsSchema = new Schema<ISiteSettings>(
   {
-    pgName: { type: String, default: 'Sree Kunj Girls PG' },
+    pgName: { type: String, default: 'Shri Kunj Girls PG' },
     tagline: { type: String, default: 'Safe, Serene & Luxurious Accommodation for Women' },
     description: {
       type: String,
       default:
-        'Sree Kunj Girls PG is a premier accommodation in Jaipur, strategically located near JECRC University and Poornima University. Fully furnished AC rooms, 4-tier security, hygienic meals, high-speed Wi-Fi 6, and a serene community.',
+        'Shri Kunj Girls PG is a premier accommodation in Jaipur, strategically located near JECRC University and Poornima University. Fully furnished AC rooms, 4-tier security, hygienic meals, high-speed Wi-Fi 6, and a serene community.',
     },
     whatsappNumber: { type: String, default: '918957356189' },
     contactPhone: { type: String, default: '+91 89573 56189' },
-    contactEmail: { type: String, default: 'admissions@sreekunjgirlspg.com' },
+    contactEmail: { type: String, default: 'admissions@shrikunjgirlspg.com' },
     address: {
       type: String,
       default: 'Plot 42, Institutional Corridor, Near JECRC University Gate, Sitapura Industrial Area, Jaipur, Rajasthan 302022',
@@ -72,7 +72,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
       type: String,
       default: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1920&q=80',
     },
-    heroHeading: { type: String, default: 'Sree Kunj Girls PG' },
+    heroHeading: { type: String, default: 'Shri Kunj Girls PG' },
     heroSubheading: {
       type: String,
       default:
@@ -81,7 +81,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
     heroBadge: { type: String, default: 'Girls PG in Jaipur • Near JECRC & Poornima' },
     seoTitle: {
       type: String,
-      default: 'Sree Kunj Girls PG Jaipur | Luxury Girls PG Near JECRC & Poornima University',
+      default: 'Shri Kunj Girls PG Jaipur | Luxury Girls PG Near JECRC & Poornima University',
     },
     seoDescription: {
       type: String,

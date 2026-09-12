@@ -117,7 +117,7 @@ export default function AdminMediaPage() {
     setTestUniversity('JECRC University');
     setTestVideoUrl('');
     setTestPosterUrl('');
-    setTestText('Living at Sree Kunj Girls PG has made my college life so peaceful and secure!');
+    setTestText('Living at Shri Kunj Girls PG has made my college life so peaceful and secure!');
     setTestRating(5);
     setTestModalOpen(true);
   };

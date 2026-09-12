@@ -41,7 +41,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ whatsappNumb
                   <MessageSquare className="w-4 h-4 fill-current" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-xs text-slate-900">Sree Kunj Helpline</h4>
+                  <h4 className="font-bold text-xs text-slate-900">Shri Kunj Helpline</h4>
                   <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     Online • Replies in ~2 mins

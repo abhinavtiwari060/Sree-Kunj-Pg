@@ -12,7 +12,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  pgName = 'Sree Kunj Girls PG',
+  pgName = 'Shri Kunj Girls PG',
   onOpenBooking,
   onOpenVisit,
 }) => {
@@ -51,12 +51,12 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Left: Brand Logo Mascot & Title */}
         <Link href="#hero" className="flex items-center gap-2.5 shrink-0 group">
           <div className="w-10 h-10 rounded-full bg-pink-100 border border-pink-300 p-0.5 shadow-xs overflow-hidden flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-            <img src="/logo.svg" alt="Sree Kunj Logo" className="w-full h-full object-contain" />
+            <img src="/logo.svg" alt="Shri Kunj Logo" className="w-full h-full object-contain" />
           </div>
 
           <div className="flex flex-col">
             <span className="font-black text-lg sm:text-xl tracking-tight text-slate-900 group-hover:text-pink-600 transition-colors whitespace-nowrap leading-none">
-              Sree Kunj <span className="text-pink-600 font-extrabold">Girls PG</span>
+              Shri Kunj <span className="text-pink-600 font-extrabold">Girls PG</span>
             </span>
             <span className="text-[10px] font-bold text-pink-700 tracking-wider uppercase flex items-center gap-1 whitespace-nowrap mt-1">
               <span className="w-1.5 h-1.5 rounded-full bg-pink-600 inline-block" />

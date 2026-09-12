@@ -15,8 +15,8 @@ interface AboutProps {
 }
 
 export const About: React.FC<AboutProps> = ({
-  pgName = 'Sree Kunj Girls PG',
-  description = 'Sree Kunj Girls PG offers premium student living tailored for scholars and young professionals attending JECRC University, Poornima University, and surrounding institutions in Jaipur. Designed with 24/7 security, high-speed Wi-Fi 6, chef-prepared hygienic meals, and pristine air-conditioned living spaces across 4 dedicated floors.',
+  pgName = 'Shri Kunj Girls PG',
+  description = 'Shri Kunj Girls PG offers premium student living tailored for scholars and young professionals attending JECRC University, Poornima University, and surrounding institutions in Jaipur. Designed with 24/7 security, high-speed Wi-Fi 6, chef-prepared hygienic meals, and pristine air-conditioned living spaces across 4 dedicated floors.',
   nearbyColleges = [
     { name: 'JECRC University', distance: '450 meters', travelTime: '2 mins walk' },
     { name: 'Poornima University', distance: '1.2 km', travelTime: '4 mins drive' },
